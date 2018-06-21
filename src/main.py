@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 
 from . import assets, board, config
+import person
 
 def main():
     pygame.init()
