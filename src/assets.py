@@ -14,7 +14,7 @@ def load_images(directory):
         if ext.lower() == ".png":
             img = pygame.image.load(os.path.join(directory, picture))
             img = img.convert()
-            img = pygame.transform.scale(img, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+            #img = pygame.transform.scale(img, (config.SQUARE_SIZE, config.SQUARE_SIZE))
 
             images[name] = img
 
