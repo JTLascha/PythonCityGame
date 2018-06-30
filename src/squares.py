@@ -1,18 +1,18 @@
 import pygame
 
-from . import assets, config, person
+from . import assets, config, menus, person
 
 class _BaseSquare(pygame.sprite.Sprite):
-    def __init__(self, x, y, id, owner, max_population):
+    def __init__(self, x, y, index, owner, max_population):
         # Call the parent class constructor
         pygame.sprite.Sprite.__init__(self)
 
         self.x = x
         self.y = y
-        self.id = id
+        self.index = index
+        self.owner = owner
         self.max_population = max_population
         self.people = []
-        self.owner = owner
 
         self.image = None
 
@@ -20,14 +20,14 @@ class _BaseSquare(pygame.sprite.Sprite):
         """Draw the square contents (shared by all buildings)"""
         surface.blit(self.image, self.rect)
 
-    def on_click(self):
+    def get_menu(self):
         pass
 
-    def add_person(person):
+    def add_person(self, person):
         person.id = self.get_population() + 1
         self.people.append(person)
 
-    def remove_person(person_id):
+    def remove_person(self, person_id):
         for i in range(0, len(self.people)):
             if self.people[i].id == person_id:
                 return self.people.pop(i)
@@ -40,36 +40,48 @@ class _BaseSquare(pygame.sprite.Sprite):
         dest.add_person(person)
 
 
-
-""" The values passed for the max population for each square were
-    picked pretty much randomly. We will need to actually think about
-    reasonable values for these in the future.
-"""
-
-class EmptySquare(_BaseSquare):
-    def __init__(self, x, y, id, owner):
+class ForSaleSquare(_BaseSquare):
+    def __init__(self, x, y, index, owner):
         # Call parent constructor
-        _BaseSquare.__init__(self, x, y, id, owner, 200)
+        _BaseSquare.__init__(self, x, y, index, owner, 0)
 
-        self.image = assets.get_image("empty")
+        self.image = assets.get_image("forsale")
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+
         self.rect = self.image.get_rect().move((x, y))
 
-    def on_click(self, state_machine):
+    def get_menu(self):
+        return menus.BuyMenu(self)
+
+
+class EmptySquare(_BaseSquare):
+    def __init__(self, x, y, index, owner):
+        # Call parent constructor
+        _BaseSquare.__init__(self, x, y, index, owner, 0)
+
+        self.image = assets.get_image("empty")
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+        self.rect = self.image.get_rect().move((x, y))
+
+    def get_menu(self):
+        # return menus.BuildMenu(self)
         pass
 
 
 class Restaurant(_BaseSquare):
-    def __init__(self, x, y, id, owner):
+    def __init__(self, x, y, index, owner):
         # Call parent constructor
-        _BaseSquare.__init__(self, x, y, id, owner, 100)
+        _BaseSquare.__init__(self, x, y, index, owner)
 
         self.image = assets.get_image("restaurant")
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect()
 
         # TODO: Add building properties
 
-    def on_click(self, state_machine):
+    def get_menu(self):
         pass
+
 
 class Factory(_BaseSquare):
     def __init__(self, x, y, id, owner):
@@ -77,5 +89,5 @@ class Factory(_BaseSquare):
         
         # TODO: Add image asset
 
-    def on_click(self, state_machine):
+    def get_menu(self):
         pass

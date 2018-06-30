@@ -8,23 +8,31 @@ class Board:
 
 		self.board_squares = []
 
-		for y in range(config.SQUARE_SIZE//2, config.WINDOW_SIZE - config.SQUARE_SIZE//2, config.SQUARE_SIZE*2):
-			for x in range(config.SQUARE_SIZE//2, config.WINDOW_SIZE - config.SQUARE_SIZE//2, config.SQUARE_SIZE*2):
-				self.board_squares.append(squares.EmptySquare(x, y, len(self.board_squares), None))
+		for y in range(config.SQUARE_SIZE // 2, config.WINDOW_HEIGHT - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
+			for x in range(config.SQUARE_SIZE // 2, config.MAP_WIDTH - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
+				self.board_squares.append(squares.ForSaleSquare(x, y, len(self.board_squares), None))
 
 	def draw(self, surface):
-		surface.fill((0, 255, 0))
+		surface.fill((0, 0xa9, 0x30))
 		for s in self.board_squares:
 			s.draw(surface)
 
-	def get_click_id(self, mouseX, mouseY):
+	def draw_outline(self, surface, mouseX, mouseY):
 		for s in self.board_squares:
-			if mouseX >= s.x and mouseX <= s.x + 32:
-				if mouseY >= s.y and mouseY <= s.x + 32:
-					return s.id
+			if s.rect.collidepoint(mouseX, mouseY):
+				pygame.draw.rect(surface, (0xee, 0xdd, 0x2a), (s.x, s.y, config.SQUARE_SIZE + 2, config.SQUARE_SIZE + 2), 1)
 
-	def replace_square(self, id, new_square):
-		self.board_squares[id] = new_square
 
-	def get_square(self, id):
-		return self.board_squares[id]
+	def get_click_index(self, mouseX, mouseY):
+		for s in self.board_squares:
+			if s.rect.collidepoint(mouseX, mouseY):
+				return s.index
+
+	def replace_square(self, index, new_square):
+		self.board_squares[index] = new_square
+
+	def get_square(self, index):
+		return self.board_squares[index]
+
+	def get_menu(self, index):
+		return self.board_squares[index].get_menu()

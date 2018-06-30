@@ -1,14 +1,17 @@
 import pygame
 from pygame.locals import *
 
-from . import assets, board, config
-import person
+from . import assets, board, config, menus, person
 
 def main():
     pygame.init()
 
-    screen = pygame.display.set_mode((config.WINDOW_SIZE, config.WINDOW_SIZE), HWSURFACE | DOUBLEBUF)
+    screen = pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), HWSURFACE | DOUBLEBUF)
     pygame.display.set_caption("Python Board Game!")
+
+    # Setup map and menu surfaces
+    map_surface = pygame.Surface((config.MAP_WIDTH, config.MAP_HEIGHT))
+    menu_surface = pygame.Surface((config.MENU_WIDTH, config.MENU_HEIGHT))
 
     # Load images and music
     assets.load_images("assets/")
@@ -37,8 +40,12 @@ def main():
                 running = False
 
             elif event.type == MOUSEBUTTONDOWN:
-                # TODO: Process mouse click
-                pass
+                click_index = game_board.get_click_index(*pygame.mouse.get_pos())
+                if click_index is not None:
+                    curr_menu = game_board.get_menu(click_index)
+                else:
+                    curr_menu = None
+                
             elif event.type == KEYDOWN:
                 if event.key == K_f:
                     draw_fps = not draw_fps
@@ -47,13 +54,29 @@ def main():
                     running = False
 
                 elif event.key == K_g:
-                    screen = pygame.display.set_mode((config.WINDOW_SIZE, config.WINDOW_SIZE), FULLSCREEN | HWSURFACE | DOUBLEBUF)
+                    if screen.get_flags() & FULLSCREEN:
+                        pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT))
+                    else:
+                        pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
     
         # Draw all objects to the screen
-        game_board.draw(screen)
+        map_surface.fill((0, 0, 0))
+        menu_surface.fill((0, 0, 0))
+        screen.fill((0, 0, 0))
 
+        game_board.draw(map_surface)
+
+        if pygame.mouse.get_focused():
+            mouseX, mouseY = pygame.mouse.get_pos()
+            if mouseX < config.MAP_HEIGHT:
+                game_board.draw_outline(map_surface, mouseX, mouseY)
+
+        menu_surface.fill((0, 0, 0))
         if curr_menu is not None:
-            curr_menu.draw(screen)
+            curr_menu.draw(menu_surface)
+
+        screen.blit(map_surface, (0, 0))
+        screen.blit(menu_surface, (config.MAP_WIDTH, 0))
 
         if draw_fps:
             fps_text = font.render(str(int(main_clock.get_fps())), 1, (0, 0, 0), (255, 255,255))
