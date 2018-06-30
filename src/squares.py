@@ -21,21 +21,26 @@ class _BaseSquare(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
     def get_menu(self):
+        """Get menu object referencing this square (self)"""
         pass
 
     def add_person(self, person):
+        """Adds a person object to the square"""
         person.id = self.get_population() + 1
         self.people.append(person)
 
     def remove_person(self, person_id):
+        """Removes and returns the person with the given id from the square"""
         for i in range(0, len(self.people)):
             if self.people[i].id == person_id:
                 return self.people.pop(i)
 
     def get_population(self):
+        """Number of people in the square"""
         return len(self.people)
 
     def move_person(self, person_id, dest):
+        """Removes person from this square and adds them to the given square"""
         person = self.remove_person(person_id)
         dest.add_person(person)
 

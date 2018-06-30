@@ -7,7 +7,6 @@ images = {}
 music = {}
 
 def load_images(directory):
-    print(os.curdir)
     for picture in os.listdir(directory):
         name, ext = os.path.splitext(picture)
 

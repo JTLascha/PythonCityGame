@@ -39,13 +39,15 @@ def main():
             if event.type == QUIT:
                 running = False
 
+            # Handle click events
             elif event.type == MOUSEBUTTONDOWN:
                 click_index = game_board.get_click_index(*pygame.mouse.get_pos())
                 if click_index is not None:
                     curr_menu = game_board.get_menu(click_index)
                 else:
                     curr_menu = None
-                
+            
+            # Handle keyboard events
             elif event.type == KEYDOWN:
                 if event.key == K_f:
                     draw_fps = not draw_fps
@@ -59,13 +61,14 @@ def main():
                     else:
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
     
-        # Draw all objects to the screen
+        # Draw all objects to the surfaces
         map_surface.fill((0, 0, 0))
         menu_surface.fill((0, 0, 0))
         screen.fill((0, 0, 0))
 
         game_board.draw(map_surface)
 
+        # Highlit squares if hovered over
         if pygame.mouse.get_focused():
             mouseX, mouseY = pygame.mouse.get_pos()
             if mouseX < config.MAP_HEIGHT:
@@ -74,7 +77,11 @@ def main():
         menu_surface.fill((0, 0, 0))
         if curr_menu is not None:
             curr_menu.draw(menu_surface)
+        else:
+            # Draw stats menu (when there is no menu selected)
+            pass
 
+        # Draw both the map and menu to the screen
         screen.blit(map_surface, (0, 0))
         screen.blit(menu_surface, (config.MAP_WIDTH, 0))
 

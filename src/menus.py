@@ -6,9 +6,11 @@ class _Menu:
         self.building = building
 
     def draw(self, surface):
+        """Draws the contents of the menu to the surface"""
         pass
 
     def handle_click(self, mouse_pos):
+        """Handles any mouse click events on the menu"""
         pass
 
 class BuyMenu(_Menu):
