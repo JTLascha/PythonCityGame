@@ -69,18 +69,18 @@ class EmptySquare(_BaseSquare):
         self.rect = self.image.get_rect().move((x, y))
 
     def get_menu(self):
-        # return menus.BuildMenu(self)
-        pass
+        return menus.BuildMenu(self)
+        
 
 
 class Restaurant(_BaseSquare):
     def __init__(self, x, y, index, owner):
         # Call parent constructor
-        _BaseSquare.__init__(self, x, y, index, owner)
+        _BaseSquare.__init__(self, x, y, index, owner, 15)
 
         self.image = assets.get_image("restaurant")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect().move((x, y))
 
         # TODO: Add building properties
 
@@ -89,10 +89,12 @@ class Restaurant(_BaseSquare):
 
 
 class Factory(_BaseSquare):
-    def __init__(self, x, y, id, owner):
-        _BaseSquare.__init__(self, x, y, id, owner, 300)
+    def __init__(self, x, y, index, owner):
+        _BaseSquare.__init__(self, x, y, index, owner, 300)
         
-        # TODO: Add image asset
+        self.image = assets.get_image("factory")
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+        self.rect = self.image.get_rect().move((x, y))
 
     def get_menu(self):
         pass

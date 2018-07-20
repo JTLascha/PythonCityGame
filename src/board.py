@@ -35,9 +35,9 @@ class Board:
 			if s.rect.collidepoint(mouseX, mouseY):
 				return s.index
 
-	def replace_square(self, index, new_square):
+	def replace_square(self, index, square_type, owner):
 		"""Completely replaces the square at a certain index"""
-		self.board_squares[index] = new_square
+		self.board_squares[index] = square_type(self.board_squares[index].x, self.board_squares[index].y, index, owner)
 
 	def get_square(self, index):
 		"""Returns the Square object at index"""

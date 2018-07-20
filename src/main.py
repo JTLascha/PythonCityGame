@@ -34,8 +34,10 @@ def main():
     if num_players == 2:
         players.append(Player(0, 500))
         players.append(Player(1, 500))
-        game_board.board_squares[0] = squares.EmptySquare(game_board.board_squares[0].x, game_board.board_squares[0].y, 0, players[0])
-        game_board.board_squares[-1] = squares.EmptySquare(game_board.board_squares[-1].x, game_board.board_squares[-1].y, game_board.board_squares[-1].index, players[1])
+        game_board.replace_square(0, squares.EmptySquare, players[0])
+        game_board.replace_square(len(game_board.board_squares) - 1, squares.EmptySquare, players[1])
+        # game_board.board_squares[0] = squares.EmptySquare(game_board.board_squares[0].x, game_board.board_squares[0].y, 0, players[0])
+        # game_board.board_squares[-1] = squares.EmptySquare(game_board.board_squares[-1].x, game_board.board_squares[-1].y, game_board.board_squares[-1].index, players[1])
 
     # Create main clock for constant FPS
     main_clock = pygame.time.Clock()
@@ -57,11 +59,18 @@ def main():
 
             # Handle click events
             elif event.type == MOUSEBUTTONDOWN:
-                click_index = game_board.get_click_index(*pygame.mouse.get_pos())
-                if click_index is not None:
-                    curr_menu = game_board.get_menu(click_index)
+                if pygame.mouse.get_pos()[0] < config.MAP_WIDTH:
+                    click_index = game_board.get_click_index(*pygame.mouse.get_pos())
+                    if click_index is not None:
+                        curr_menu = game_board.get_menu(click_index)
+                    else:
+                        curr_menu = None
                 else:
-                    curr_menu = None
+                    if curr_menu:
+                        new_building = curr_menu.handle_click(pygame.mouse.get_pos()[0] - config.MAP_WIDTH, pygame.mouse.get_pos()[1], players[curr_player])
+                        if new_building:
+                            game_board.board_squares[new_building.index] = new_building
+                            curr_menu = None
             
             # Handle keyboard events
             elif event.type == KEYDOWN:
@@ -77,7 +86,7 @@ def main():
                     else:
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
 
-                elif event.key == K_KP_ENTER:
+                elif event.key == K_RETURN:
                     if curr_player == num_players - 1:
                         # process round end, calculate new turn order
                         curr_player = 0
