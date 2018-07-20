@@ -1,7 +1,12 @@
 import pygame
 from pygame.locals import *
 
-from . import assets, board, config, menus, person
+from . import assets, board, config, level, menus, person, squares
+
+class Player:
+    def __init__(self, num, start_money):
+        self.num = num
+        self.money = start_money
 
 def main():
     pygame.init()
@@ -17,11 +22,20 @@ def main():
     assets.load_images("assets/")
     assets.load_music("assets/")
 
-    # Load our main font for text
+    # Load our main fonts for text
     font = pygame.font.Font(None, 20)
+    font_medium = pygame.font.Font(None, 32)
 
     # Create and setup game board
-    game_board = board.Board(num_players=2)
+    game_board = level.get_level_board("levels/", "level1.lvl")
+
+    num_players = 2
+    players = []
+    if num_players == 2:
+        players.append(Player(0, 500))
+        players.append(Player(1, 500))
+        game_board.board_squares[0] = squares.EmptySquare(game_board.board_squares[0].x, game_board.board_squares[0].y, 0, players[0])
+        game_board.board_squares[-1] = squares.EmptySquare(game_board.board_squares[-1].x, game_board.board_squares[-1].y, game_board.board_squares[-1].index, players[1])
 
     # Create main clock for constant FPS
     main_clock = pygame.time.Clock()
@@ -30,6 +44,8 @@ def main():
     # Store menu/option screen to draw above the board
     curr_menu = None
     
+    curr_player = 0
+
     # Main game loop
     running = True
     while running:
@@ -60,6 +76,14 @@ def main():
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT))
                     else:
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
+
+                elif event.key == K_KP_ENTER:
+                    if curr_player == num_players - 1:
+                        # process round end, calculate new turn order
+                        curr_player = 0
+                    else:
+                        curr_player += 1
+
     
         # Draw all objects to the surfaces
         map_surface.fill((0, 0, 0))
@@ -89,6 +113,16 @@ def main():
             fps_text = font.render(str(int(main_clock.get_fps())), 1, (0, 0, 0), (255, 255,255))
             fps_position = fps_text.get_rect()
             screen.blit(fps_text, fps_position)
+
+        # Draw money of current player
+        money_text = font_medium.render("Money: $" + str(players[curr_player].money), 1, (0, 0, 0))
+        money_position = money_text.get_rect().move(50, 0)
+        screen.blit(money_text, money_position)
+
+        # Draw player number
+        player_text = font_medium.render("Player: #" + str(curr_player), 1, (0, 0, 0))
+        player_position = player_text.get_rect().move(400, 0)
+        screen.blit(player_text, player_position)
         
         pygame.display.flip()
 

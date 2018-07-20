@@ -3,14 +3,18 @@ import pygame
 from . import config, squares
 
 class Board:
-	def __init__(self, num_players):
-		self.num_players = num_players
+	# def __init__(self):
+	# 	self.board_squares = []
 
+	# 	for y in range(config.SQUARE_SIZE // 2, config.WINDOW_HEIGHT - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
+	# 		for x in range(config.SQUARE_SIZE // 2, config.MAP_WIDTH - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
+	# 			self.board_squares.append(squares.ForSaleSquare(x, y, len(self.board_squares), None))
+
+	def __init__(self, building_list):
 		self.board_squares = []
 
-		for y in range(config.SQUARE_SIZE // 2, config.WINDOW_HEIGHT - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
-			for x in range(config.SQUARE_SIZE // 2, config.MAP_WIDTH - config.SQUARE_SIZE - config.SQUARE_SIZE // 2, int(config.SQUARE_SIZE*1.5)):
-				self.board_squares.append(squares.ForSaleSquare(x, y, len(self.board_squares), None))
+		for b in building_list:
+			self.board_squares.append(squares.ForSaleSquare(b[0], b[1], len(self.board_squares), None))
 
 	def draw(self, surface):
 		"""Draws all squares in the board to the surface"""
