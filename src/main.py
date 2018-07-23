@@ -129,7 +129,7 @@ def main():
         screen.blit(money_text, money_position)
 
         # Draw player number
-        player_text = font_medium.render("Player: #" + str(curr_player), 1, (0, 0, 0))
+        player_text = font_medium.render("Player: #" + str(curr_player + 1), 1, (0, 0, 0))	#prints curr_player + 1 so players don't have to deal with null indexing
         player_position = player_text.get_rect().move(400, 0)
         screen.blit(player_text, player_position)
         
