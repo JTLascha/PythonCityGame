@@ -13,8 +13,10 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.owner = owner
         self.max_population = max_population
         self.people = []
-
         self.image = None
+	self.baseQoL = 50
+	self.QoL = 50
+	self.QoLModRange = 1
 
     def draw(self, surface):
         """Draw the square contents (shared by all buildings)"""
@@ -44,6 +46,10 @@ class _BaseSquare(pygame.sprite.Sprite):
         person = self.remove_person(person_id)
         dest.add_person(person)
 
+   # call this in the map class updateQoL function
+    def updateQoL(self, change):
+	self.QoL = self.Qol + change
+
 
 class ForSaleSquare(_BaseSquare):
     def __init__(self, x, y, index, owner):
@@ -70,7 +76,7 @@ class EmptySquare(_BaseSquare):
 
     def get_menu(self):
         return menus.BuildMenu(self)
-        
+
 
 
 class Restaurant(_BaseSquare):
@@ -81,7 +87,7 @@ class Restaurant(_BaseSquare):
         self.image = assets.get_image("restaurant")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-
+	self.QoL = 65
         # TODO: Add building properties
 
     def get_menu(self):
@@ -91,10 +97,10 @@ class Restaurant(_BaseSquare):
 class Factory(_BaseSquare):
     def __init__(self, x, y, index, owner):
         _BaseSquare.__init__(self, x, y, index, owner, 300)
-        
+
         self.image = assets.get_image("factory")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-
+	self.QoL = 0
     def get_menu(self):
         pass
