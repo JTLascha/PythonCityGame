@@ -1,7 +1,6 @@
 import pygame
 
-#from . import squares
-import squares
+from . import squares
 
 class _Menu:
     """Base menu object"""
