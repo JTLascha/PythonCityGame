@@ -128,6 +128,7 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.image = None
         self.QoL = 0
         self.baseQoL = 0
+
     def produce(self):
         money = self.profits * self.QoL
 	return (self.owner, money)

@@ -46,3 +46,14 @@ class Board:
 	def get_menu(self, index):
 		"""Returns the Menu object of the Square at index"""
 		return self.board_squares[index].get_menu()
+
+        def genProfit(self):
+                """Iterates through the board getting the profit of each square adds it to the player list and returns it"""
+                p = []
+                for temp in range(0, 2):
+                    p.append(0)
+                for s in self.board_squares:
+                    profit = s.produce()
+                    if profit[0] is not None:
+                        p[profit[0].num] += profit[1]
+                return p

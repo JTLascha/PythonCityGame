@@ -9,6 +9,32 @@ class Player:
     def __init__(self, num, start_money):
         self.num = num
         self.money = start_money
+def getNextPlayer(playerList,gameBoard):
+    p = playerList
+    b = gameBoard
+    turn = 0
+    truTurn = 0
+    while True:
+        truTurn = (truTurn+ 1)%3
+        if truTurn == 2:
+            prof = b.genProfit()
+            p[0].money += prof[0]
+            p[1].money += prof[1]
+            if p[0].money >= 6000 or p[1].money >= 6000:
+                if p[0].money != p[1].money:
+                    yield -1
+            
+            if p[0].money <= p[1].money:
+                turn = 0
+            else:
+                turn = 1
+            truTurn = 0
+        else:
+            if turn == 0:
+                turn = 1
+            else:
+                turn = 0
+        yield turn
 
 def main():
     pygame.init()
@@ -41,6 +67,7 @@ def main():
     game_board = level.get_level_board("levels/", "level1.lvl")
 
     num_players = 2
+    winner = -1
     players = []
     if num_players == 2:
         players.append(Player(0, 500))
@@ -49,7 +76,7 @@ def main():
         game_board.replace_square(len(game_board.board_squares) - 1, squares.EmptySquare, players[1])
         # game_board.board_squares[0] = squares.EmptySquare(game_board.board_squares[0].x, game_board.board_squares[0].y, 0, players[0])
         # game_board.board_squares[-1] = squares.EmptySquare(game_board.board_squares[-1].x, game_board.board_squares[-1].y, game_board.board_squares[-1].index, players[1])
-
+    getNextTurn = getNextPlayer(players,game_board)
     # Create main clock for constant FPS
     main_clock = pygame.time.Clock()
     draw_fps = True
@@ -98,11 +125,14 @@ def main():
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
 
                 elif event.key == K_RETURN:
-                    if curr_player == num_players - 1:
-                        # process round end, calculate new turn order
-                        curr_player = 0
-                    else:
-                        curr_player += 1
+                    curr_player = getNextTurn.next()
+                    if curr_player == -1:
+                        if players[0].money < players[1].money:
+                            winner = 1
+                            curr_player = 1
+                        else:
+                            winner = 0
+                            curr_player = 0
 
                 elif event.key == K_m:
                     mute = not mute
@@ -165,8 +195,22 @@ def main():
 
         pygame.display.flip()
 
-        # We want a fixed FPS
+         # We want a fixed FPS
         main_clock.tick(config.FRAME_RATE)
+        if winner != -1:
+            running = False
+            running2 = True
+            while running2:
+                map_surface.fill((0, 0, 0))
+                menu_surface.fill((0, 0, 0))
+                screen.fill((0, 0, 0))
+                player_text = font_medium.render("Player: #" + str(curr_player + 1) +" has won!", 1, (50,205,50))
+                player_position = player_text.get_rect().move(config.WINDOW_WIDTH/2 - 50, config.WINDOW_HEIGHT/2)
+                screen.blit(player_text, player_position)
+                pygame.display.flip()
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        running2 = False
 
     pygame.quit()
 
