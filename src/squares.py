@@ -129,7 +129,7 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.QoL = 0
         self.baseQoL = 0
     def produce(self):
-        money = self.profits * self.QoL
+        money = self.profits * self.QoL / 100
 	return (self.owner, money)
 
     def draw(self, surface):
@@ -183,7 +183,7 @@ class Restaurant(_BaseSquare):
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 80
 	self.baseQoL = 80
-	self.profits = 20
+	self.profits = 50
 
     def get_menu(self):
         return OwnedMenu(self)
