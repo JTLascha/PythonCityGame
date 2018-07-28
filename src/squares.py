@@ -67,6 +67,20 @@ class BuildMenu(_Menu):
                 return Restaurant(self.building.x, self.building.y, self.building.index, player)
 
         return None
+
+class OwnedMenu(_Menu):
+    def __init__(self, building):
+        _Menu.__init__(self, building)
+
+    def draw(self, surface):
+        building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255, 255))
+        surface.blit(building_text, building_text.get_rect())
+        
+        building_info_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
+        info_position = building_info_text.get_rect().move(0, 150)
+        surface.blit(building_info_text, info_position)
+
+
 class _BaseSquare(pygame.sprite.Sprite):
     def __init__(self, x, y, index, owner, max_population):
         # Call the parent class constructor
@@ -77,7 +91,6 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.index = index
         self.owner = owner
         self.max_population = max_population
-        self.people = []
         self.image = None
         self.baseQoL = 50
         self.QoL = 50
@@ -90,26 +103,6 @@ class _BaseSquare(pygame.sprite.Sprite):
     def get_menu(self):
         """Get menu object referencing this square (self)"""
         pass
-
-    def add_person(self, person):
-        """Adds a person object to the square"""
-        person.id = self.get_population() + 1
-        self.people.append(person)
-
-    def remove_person(self, person_id):
-        """Removes and returns the person with the given id from the square"""
-        for i in range(0, len(self.people)):
-            if self.people[i].id == person_id:
-                return self.people.pop(i)
-
-    def get_population(self):
-        """Number of people in the square"""
-        return len(self.people)
-
-    def move_person(self, person_id, dest):
-        """Removes person from this square and adds them to the given square"""
-        person = self.remove_person(person_id)
-        dest.add_person(person)
 
    # call this in the map class updateQoL function
     def updateQoL(self, change):
@@ -156,8 +149,7 @@ class Restaurant(_BaseSquare):
         # TODO: Add building properties
 
     def get_menu(self):
-        pass
-
+        return OwnedMenu(self)
 
 class Factory(_BaseSquare):
     def __init__(self, x, y, index, owner):
@@ -168,4 +160,4 @@ class Factory(_BaseSquare):
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
     def get_menu(self):
-        pass
+        return OwnedMenu(self)
