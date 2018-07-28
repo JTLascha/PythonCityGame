@@ -3,7 +3,7 @@ import random
 import pygame
 from pygame.locals import *
 
-from . import assets, board, config, level, menus, person, squares
+from . import assets, board, config, level, person, squares
 
 class Player:
     def __init__(self, num, start_money):
