@@ -64,7 +64,7 @@ class BuildMenu(_Menu):
         elif self.factory_position.collidepoint(mouseX, mouseY):
             if player.money >= 150:
                 player.money -= 150
-                return Restaurant(self.building.x, self.building.y, self.building.index, player)
+                return Factory(self.building.x, self.building.y, self.building.index, player)
 
         return None
 
@@ -76,10 +76,13 @@ class OwnedMenu(_Menu):
         building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255, 255))
         surface.blit(building_text, building_text.get_rect())
         
-        building_info_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
-        info_position = building_info_text.get_rect().move(0, 150)
-        surface.blit(building_info_text, info_position)
+        building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
+        qol_position = building_qol_text.get_rect().move(0, 100)
+        surface.blit(building_qol_text, qol_position)
 
+        building_profit_text = self.font.render("Profit: " + str(self.building.profits), 1, (255, 255, 255))
+        profit_position = building_qol_text.get_rect().move(0, 50)
+        surface.blit(building_profit_text, profit_position)
 
 class _BaseSquare(pygame.sprite.Sprite):
     def __init__(self, x, y, index, owner, max_population):
