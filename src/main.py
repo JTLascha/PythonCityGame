@@ -9,6 +9,7 @@ class Player:
     def __init__(self, num, start_money):
         self.num = num
         self.money = start_money
+
 def getNextPlayer(playerList,gameBoard):
     p = playerList
     b = gameBoard
@@ -125,7 +126,7 @@ def main():
                         pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), FULLSCREEN | HWSURFACE | DOUBLEBUF)
 
                 elif event.key == K_RETURN:
-                    curr_player = getNextTurn.next()
+                    curr_player = next(getNextTurn)
                     if curr_player == -1:
                         if players[0].money < players[1].money:
                             winner = 1
