@@ -85,16 +85,17 @@ class _BaseSquare(pygame.sprite.Sprite):
     def __init__(self, x, y, index, owner, max_population):
         # Call the parent class constructor
         pygame.sprite.Sprite.__init__(self)
-
+	self.profits = 0
         self.x = x
         self.y = y
         self.index = index
         self.owner = owner
         self.max_population = max_population
         self.image = None
-        self.baseQoL = 50
-        self.QoL = 50
-        self.QoLModRange = 1
+        self.QoL = 0
+    def produce(self):
+        money = self.profits * self.QoL
+	return (self.owner, money)
 
     def draw(self, surface):
         """Draw the square contents (shared by all buildings)"""
@@ -145,7 +146,8 @@ class Restaurant(_BaseSquare):
         self.image = assets.get_image("restaurant")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-        self.QoL = 65
+        self.QoL = 100
+	self.profits = 20
         # TODO: Add building properties
 
     def get_menu(self):
@@ -159,5 +161,6 @@ class Factory(_BaseSquare):
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
+	self.profits = 400
     def get_menu(self):
         return OwnedMenu(self)
