@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from pygame.locals import *
 
@@ -20,7 +22,16 @@ def main():
 
     # Load images and music
     assets.load_images("assets/")
-    assets.load_music("assets/")
+    music = assets.load_music("assets/")
+
+    # Setup music player
+    SONG_END = pygame.USEREVENT + 1
+    pygame.mixer.music.set_endevent(SONG_END)
+    pygame.mixer.music.load(random.choice(music))
+    pygame.mixer.music.set_volume(0.8)
+    pygame.mixer.music.play()
+
+    mute = False
 
     # Load our main fonts for text
     font = pygame.font.Font(None, 20)
@@ -93,6 +104,17 @@ def main():
                     else:
                         curr_player += 1
 
+                elif event.key == K_m:
+                    mute = not mute
+                    if mute:
+                        pygame.mixer.music.set_volume(0)
+                    else:
+                        pygame.mixer.music.set_volume(0.8)
+
+            # Handle song ending
+            elif event.type == SONG_END:
+                pygame.mixer.music.load(random.choice(music))
+                pygame.mixer.music.play()
     
         # Draw all objects to the surfaces
         map_surface.fill((0, 0, 0))

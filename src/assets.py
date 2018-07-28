@@ -4,7 +4,6 @@ import pygame
 from . import config
 
 images = {}
-music = {}
 
 def load_images(directory):
     for picture in os.listdir(directory):
@@ -24,7 +23,14 @@ def get_image(name):
         return images["blank"]
 
 def load_music(directory):
-    pass
+    music = []
 
-def get_music(name):
-    return images[music]
+    for song in os.listdir(directory):
+        name, ext = os.path.splitext(song)
+
+        if ext.lower() == ".mp3":
+            music.append(directory + song)
+
+    return music
+
+            
