@@ -147,7 +147,7 @@ class Restaurant(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 15)
 
-        self.image = assets.get_image("restaurant")
+        self.image = assets.get_image("restaurant" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 80
@@ -161,7 +161,7 @@ class Factory(_BaseSquare):
     def __init__(self, x, y, index, owner):
         _BaseSquare.__init__(self, x, y, index, owner, 300)
 
-        self.image = assets.get_image("factory")
+        self.image = assets.get_image("factory" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
