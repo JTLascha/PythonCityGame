@@ -47,6 +47,10 @@ class BuildMenu(_Menu):
         building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255,255))
         surface.blit(building_text, building_text.get_rect())
 
+        owner_text = self.font.render("Owner: Player " + str(self.building.owner.num + 1), 1, (255,255,255))
+        owner_position = owner_text.get_rect().move(0, 50)
+        surface.blit(owner_text, owner_position)
+
         self.restaurant_button = self.font.render("Build Restaurant ($100)", 1, (255, 255, 0), (150, 150, 150))
         self.restaurant_position = self.restaurant_button.get_rect().move(0, 100)
         surface.blit(self.restaurant_button, self.restaurant_position)
