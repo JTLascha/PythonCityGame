@@ -75,7 +75,7 @@ class OwnedMenu(_Menu):
     def draw(self, surface):
         building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255, 255))
         surface.blit(building_text, building_text.get_rect())
-        
+
         building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
         qol_position = building_qol_text.get_rect().move(0, 100)
         surface.blit(building_qol_text, qol_position)
@@ -96,6 +96,7 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.max_population = max_population
         self.image = None
         self.QoL = 0
+        self.baseQoL = 0
     def produce(self):
         money = self.profits * self.QoL
 	return (self.owner, money)
@@ -149,9 +150,9 @@ class Restaurant(_BaseSquare):
         self.image = assets.get_image("restaurant")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-        self.QoL = 100
+        self.QoL = 80
+	self.baseQoL = 80
 	self.profits = 20
-        # TODO: Add building properties
 
     def get_menu(self):
         return OwnedMenu(self)
@@ -164,6 +165,7 @@ class Factory(_BaseSquare):
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
+	self.baseQoL = 0
 	self.profits = 400
     def get_menu(self):
         return OwnedMenu(self)
