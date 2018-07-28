@@ -3,7 +3,7 @@ import random
 import pygame
 from pygame.locals import *
 
-from . import assets, board, config, level, person, squares
+from . import assets, board, config, level, squares
 
 class Player:
     def __init__(self, num, start_money):
@@ -111,6 +111,9 @@ def main():
                     else:
                         pygame.mixer.music.set_volume(0.8)
 
+                elif event.key == K_h:
+                    curr_menu = squares.HelpMenu()
+
             # Handle song ending
             elif event.type == SONG_END:
                 pygame.mixer.music.load(random.choice(music))
@@ -152,9 +155,14 @@ def main():
 
         # Draw player number
         player_text = font_medium.render("Player: #" + str(curr_player + 1), 1, (0, 0, 0))	#prints curr_player + 1 so players don't have to deal with null indexing
-        player_position = player_text.get_rect().move(400, 0)
+        player_position = player_text.get_rect().move(200, 0)
         screen.blit(player_text, player_position)
-        
+
+         # Draw help text
+        help_text = font_medium.render("Press h for help", 1, (0, 0, 0))
+        help_position = help_text.get_rect().move(400, 0)
+        screen.blit(help_text, help_position)       
+
         pygame.display.flip()
 
         # We want a fixed FPS
