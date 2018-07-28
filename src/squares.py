@@ -73,16 +73,41 @@ class OwnedMenu(_Menu):
         _Menu.__init__(self, building)
 
     def draw(self, surface):
-        building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255, 255))
+        building_text = self.font.render("Owner: Player " + str(self.building.owner.num + 1), 1, (255, 255, 255))
         surface.blit(building_text, building_text.get_rect())
         
-        building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
-        qol_position = building_qol_text.get_rect().move(0, 100)
-        surface.blit(building_qol_text, qol_position)
+        qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
+        qol_position = qol_text.get_rect().move(0, 100)
+        surface.blit(qol_text, qol_position)
 
-        building_profit_text = self.font.render("Profit: " + str(self.building.profits), 1, (255, 255, 255))
-        profit_position = building_qol_text.get_rect().move(0, 50)
-        surface.blit(building_profit_text, profit_position)
+        profit_text = self.font.render("Profit: " + str(self.building.profits), 1, (255, 255, 255))
+        profit_position = profit_text.get_rect().move(0, 50)
+        surface.blit(profit_text, profit_position)
+
+class HelpMenu(_Menu):
+    def __init__(self):
+        _Menu.__init__(self, None)
+
+    def draw(self, surface):
+        enter_text = "Press Enter to end your turn."
+        m_key_text = "Press m to mute."
+        f_key_text = "Press f to toggle fps."
+        esc_text   = "Press esc to quit."
+
+        enter = self.font.render(enter_text, 1, (255, 255, 255))
+        surface.blit(enter, enter.get_rect())
+        
+        m_key = self.font.render(m_key_text, 1, (255, 255, 255))
+        m_key_position = m_key.get_rect().move(0, 30)
+        surface.blit(m_key, m_key_position)
+
+        f_key = self.font.render(f_key_text, 1, (255, 255, 255))
+        f_key_position = f_key.get_rect().move(0, 60)
+        surface.blit(f_key, f_key_position)
+
+        esc_key = self.font.render(esc_text, 1, (255, 255, 255))
+        esc_key_position = esc_key.get_rect().move(0, 90)
+        surface.blit(esc_key, esc_key_position)
 
 class _BaseSquare(pygame.sprite.Sprite):
     def __init__(self, x, y, index, owner, max_population):
