@@ -58,11 +58,17 @@ class BuildMenu(_Menu):
     def handle_click(self, mouseX, mouseY, player):
         if self.restaurant_position.collidepoint(mouseX, mouseY):
             if player.money >= 100:
+                if self.building.owner.num != player.num:
+                    return None
+
                 player.money -= 100
                 return Restaurant(self.building.x, self.building.y, self.building.index, player)
 
         elif self.factory_position.collidepoint(mouseX, mouseY):
             if player.money >= 150:
+                if self.building.owner.num != player.num:
+                    return None
+
                 player.money -= 150
                 return Factory(self.building.x, self.building.y, self.building.index, player)
 
