@@ -209,6 +209,47 @@ class Restaurant(_BaseSquare):
     def get_menu(self):
         return OwnedMenu(self)
 
+
+# The Public Park is a great addition to any city. It will help raise QoL significantly, but instead of producing money, it costs money to maintain. Thanks to maintainance, it can never be below 50 QoL.
+class PublicPark(_BaseSquare):
+    def __init__(self, x, y, index, owner):
+        # Call parent constructor
+        _BaseSquare.__init__(self, x, y, index, owner, 15)
+
+        self.image = assets.get_image("park" + str(self.owner.num))
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+        self.rect = self.image.get_rect().move((x, y))
+        self.QoL = 100
+	self.QoLBonus = 60
+        self.oldQoL = 100
+        self.profits = -100
+	self.minQoL = 50
+	self.maxQoL = 200
+
+    def get_menu(self):
+        return OwnedMenu(self)
+
+# Blight is a costly way to make life worse for everyone. It can only have negative QoL, which means its "profits" will actually cost its owner money.
+class Blight(_BaseSquare):
+    def __init__(self, x, y, index, owner):
+        # Call parent constructor
+        _BaseSquare.__init__(self, x, y, index, owner, 15)
+
+        self.image = assets.get_image("blight" + str(self.owner.num))
+        self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
+        self.rect = self.image.get_rect().move((x, y))
+        self.QoL = 0
+	self.QoLBonus = -100
+        self.oldQoL = -100
+        self.profits = 500
+	self.maxQoL = 0
+	self.QoLBonus = -100
+	self.minQoL = -100
+
+    def get_menu(self):
+        return OwnedMenu(self)
+
+
 class Factory(_BaseSquare):
     def __init__(self, x, y, index, owner):
         _BaseSquare.__init__(self, x, y, index, owner, 300)
