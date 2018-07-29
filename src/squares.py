@@ -106,7 +106,7 @@ class HelpMenu(_Menu):
 
         enter = self.font.render(enter_text, 1, (255, 255, 255))
         surface.blit(enter, enter.get_rect())
-        
+
         m_key = self.font.render(m_key_text, 1, (255, 255, 255))
         m_key_position = m_key.get_rect().move(0, 30)
         surface.blit(m_key, m_key_position)
@@ -130,8 +130,11 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.owner = owner
         self.max_population = max_population
         self.image = None
-        self.QoL = 0
-        self.baseQoL = 0
+        self.QoL = 30
+	self.oldQoL = 30
+        self.minQoL = 0
+	self.maxQoL = 50
+	self.QoLBonus = 0
 
     def produce(self):
         money = self.profits * self.QoL / 100
@@ -144,10 +147,17 @@ class _BaseSquare(pygame.sprite.Sprite):
     def get_menu(self):
         """Get menu object referencing this square (self)"""
         pass
+    def getOldQoL(self):
+	return self.oldQoL
 
    # call this in the map class updateQoL function
-    def updateQoL(self, change):
-        self.QoL = self.Qol + change
+    def updateQoL(self, newQoL):
+        self.oldQoL = self.QoL
+	self.QoL = (newQoL + self.QoL + self.QoLBonus) / 2
+	if self.QoL > self.maxQoL:
+		self.QoL = self.maxQoL
+	if self.QoL < self.minQoL:
+		self.QoL = self.minQoL
 
 
 class ForSaleSquare(_BaseSquare):
@@ -169,10 +179,14 @@ class EmptySquare(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 0)
 
+	self.QoL = 50
+	self.oldQoL = 50
+	self.QoLBonus = 5
+	self.maxQoL = 75
         self.image = assets.get_image("empty")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-
+	self.maxQoL = 25
     def get_menu(self):
         return BuildMenu(self)
 
@@ -187,8 +201,10 @@ class Restaurant(_BaseSquare):
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 80
-        self.baseQoL = 80
-        self.profits = 50
+	self.QoLBonus = 20
+        self.oldQoL = 80
+        self.profits = 100
+	self.maxQoL = 100
 
     def get_menu(self):
         return OwnedMenu(self)
@@ -201,7 +217,9 @@ class Factory(_BaseSquare):
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
-        self.baseQoL = 0
+        self.oldQoL = 0
+	self.QoLBonus = -20
         self.profits = 400
+	self.maxQoL = 100
     def get_menu(self):
         return OwnedMenu(self)
