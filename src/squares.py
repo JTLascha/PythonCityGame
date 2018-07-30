@@ -75,6 +75,10 @@ class BuildMenu(_Menu):
         self.blight_position = self.blight_button.get_rect().move(0, 300)
         surface.blit(self.blight_button, self.blight_position)
 
+        self.sell_button = self.font.render("Sell the Land for $100", 1, (255, 255, 0), (150, 150, 150))
+        self.sell_position = self.sell_button.get_rect().move(0, 350)
+        surface.blit(self.sell_button, self.sell_position)
+
 
     def handle_click(self, mouseX, mouseY, player):
         if self.restaurant_position.collidepoint(mouseX, mouseY):
@@ -109,7 +113,14 @@ class BuildMenu(_Menu):
                 player.money -= 50
                 return Blight(self.building.x, self.building.y, self.building.index, player)
 
-        return None
+        elif self.sell_position.collidepoint(mouseX, mouseY):
+		if self.building.owner.num != player.num:
+			return None
+
+	        player.money += 100
+        	return ForSaleSquare(self.building.x, self.building.y, self.building.index, player)
+
+	return None
 
 class OwnedMenu(_Menu):
     def __init__(self, building):
