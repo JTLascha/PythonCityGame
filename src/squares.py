@@ -24,11 +24,15 @@ class BuyMenu(_Menu):
         building_text = self.font.render("Lot #" + str(self.building.index), 1, (255, 255,255))
         surface.blit(building_text, building_text.get_rect())
 
+        building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
+        qol_position = building_qol_text.get_rect().move(0, 50)
+        surface.blit(building_qol_text, qol_position)
+
         price_text = self.font.render("Price: $200", 1, (255, 255,255))
-        surface.blit(price_text, price_text.get_rect().move(0, 50))
+        surface.blit(price_text, price_text.get_rect().move(0, 100))
 
         self.buy_button = self.font.render("Buy!", 1, (255, 255, 0), (150, 150, 150))
-        self.buy_position = self.buy_button.get_rect().move(0, 100)
+        self.buy_position = self.buy_button.get_rect().move(0, 150)
         surface.blit(self.buy_button, self.buy_position)
 
     def handle_click(self, mouseX, mouseY, player):
@@ -48,16 +52,29 @@ class BuildMenu(_Menu):
         surface.blit(building_text, building_text.get_rect())
 
         owner_text = self.font.render("Owner: Player " + str(self.building.owner.num + 1), 1, (255,255,255))
-        owner_position = owner_text.get_rect().move(0, 50)
+        owner_position = owner_text.get_rect().move(0, 100)
         surface.blit(owner_text, owner_position)
 
+        building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
+        qol_position = building_qol_text.get_rect().move(0, 50)
+        surface.blit(building_qol_text, qol_position)
+
         self.restaurant_button = self.font.render("Build Restaurant ($100)", 1, (255, 255, 0), (150, 150, 150))
-        self.restaurant_position = self.restaurant_button.get_rect().move(0, 100)
+        self.restaurant_position = self.restaurant_button.get_rect().move(0, 150)
         surface.blit(self.restaurant_button, self.restaurant_position)
 
-        self.factory_button = self.font.render("Build Factory ($150)", 1, (255, 255, 0), (150, 150, 150))
-        self.factory_position = self.factory_button.get_rect().move(0, 150)
+        self.factory_button = self.font.render("Build Factory ($100)", 1, (255, 255, 0), (150, 150, 150))
+        self.factory_position = self.factory_button.get_rect().move(0, 200)
         surface.blit(self.factory_button, self.factory_position)
+
+        self.park_button = self.font.render("Build Park ($50)", 1, (255, 255, 0), (150, 150, 150))
+        self.park_position = self.park_button.get_rect().move(0, 250)
+        surface.blit(self.park_button, self.park_position)
+
+        self.blight_button = self.font.render("Build Blight ($50)", 1, (255, 255, 0), (150, 150, 150))
+        self.blight_position = self.blight_button.get_rect().move(0, 300)
+        surface.blit(self.blight_button, self.blight_position)
+
 
     def handle_click(self, mouseX, mouseY, player):
         if self.restaurant_position.collidepoint(mouseX, mouseY):
@@ -69,12 +86,28 @@ class BuildMenu(_Menu):
                 return Restaurant(self.building.x, self.building.y, self.building.index, player)
 
         elif self.factory_position.collidepoint(mouseX, mouseY):
-            if player.money >= 150:
+            if player.money >= 100:
                 if self.building.owner.num != player.num:
                     return None
 
-                player.money -= 150
+                player.money -= 100
                 return Factory(self.building.x, self.building.y, self.building.index, player)
+
+        elif self.park_position.collidepoint(mouseX, mouseY):
+            if player.money >= 50:
+                if self.building.owner.num != player.num:
+                    return None
+
+                player.money -= 50
+                return PublicPark(self.building.x, self.building.y, self.building.index, player)
+
+        elif self.blight_position.collidepoint(mouseX, mouseY):
+            if player.money >= 50:
+                if self.building.owner.num != player.num:
+                    return None
+
+                player.money -= 50
+                return Blight(self.building.x, self.building.y, self.building.index, player)
 
         return None
 
@@ -87,12 +120,24 @@ class OwnedMenu(_Menu):
         surface.blit(building_text, building_text.get_rect())
 
         building_qol_text = self.font.render("Quality of Life: " + str(self.building.QoL), 1, (255, 255, 255))
-        qol_position = building_qol_text.get_rect().move(0, 100)
+        qol_position = building_qol_text.get_rect().move(0, 50)
         surface.blit(building_qol_text, qol_position)
 
         profit_text = self.font.render("Profit: " + str(self.building.profits), 1, (255, 255, 255))
-        profit_position = profit_text.get_rect().move(0, 50)
+	if(self.building.fee):
+	        profit_text = self.font.render("Fees: " + str(self.building.profits * -1), 1, (255, 255, 255))
+        profit_position = profit_text.get_rect().move(0, 100)
         surface.blit(profit_text, profit_position)
+
+        self.demolish_button = self.font.render("Demolish", 1, (255, 255, 0), (150, 150, 150))
+        self.demolish_position = self.demolish_button.get_rect().move(0, 150)
+        surface.blit(self.demolish_button, self.demolish_position)
+
+    def handle_click(self, mouseX, mouseY, player):
+        if self.demolish_position.collidepoint(mouseX, mouseY):
+		if self.building.owner.num == player.num:
+	        	return EmptySquare(self.building.x, self.building.y, self.building.index, player)
+	return None
 
 class HelpMenu(_Menu):
     def __init__(self):
@@ -133,8 +178,9 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.QoL = 30
 	self.oldQoL = 30
         self.minQoL = 0
-	self.maxQoL = 50
+	self.maxQoL = 100
 	self.QoLBonus = 0
+	self.fee = False
 
     def produce(self):
         money = self.profits * self.QoL / 100
@@ -182,7 +228,7 @@ class EmptySquare(_BaseSquare):
 	self.QoL = 50
 	self.oldQoL = 50
 	self.QoLBonus = 5
-	self.maxQoL = 75
+	self.maxQoL = 100
         self.image = assets.get_image("empty")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
@@ -200,9 +246,9 @@ class Restaurant(_BaseSquare):
         self.image = assets.get_image("restaurant" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-        self.QoL = 80
+        self.QoL = 50
 	self.QoLBonus = 20
-        self.oldQoL = 80
+        self.oldQoL = 50
         self.profits = 100
 	self.maxQoL = 100
 
@@ -216,13 +262,14 @@ class PublicPark(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 15)
 
+	self.fee = True
         self.image = assets.get_image("park" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 100
 	self.QoLBonus = 60
         self.oldQoL = 100
-        self.profits = -100
+        self.profits = -50
 	self.minQoL = 50
 	self.maxQoL = 200
 
@@ -235,13 +282,14 @@ class Blight(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 15)
 
+	self.fee - True
         self.image = assets.get_image("blight" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
 	self.QoLBonus = -100
         self.oldQoL = -100
-        self.profits = 500
+        self.profits = 150
 	self.maxQoL = 0
 	self.QoLBonus = -100
 	self.minQoL = -100

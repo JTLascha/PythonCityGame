@@ -8,7 +8,8 @@ from . import assets, board, config, level, squares
 class Player:
     def __init__(self, num, start_money):
         self.num = num
-        self.money = start_money
+        self.money = start_money + (num * 100) # bonus money given out based on player number
+
 
 def getNextPlayer(playerList,gameBoard):
     p = playerList
@@ -22,6 +23,10 @@ def getNextPlayer(playerList,gameBoard):
             prof = b.genProfit()
             p[0].money += prof[0]
             p[1].money += prof[1]
+	    if p[0].money < 0:
+		p[0].money = 0
+	    if p[1].money < 0:
+		p[1].money = 0
             if p[0].money >= 6000 or p[1].money >= 6000:
                 if p[0].money != p[1].money:
                     yield -1
@@ -82,10 +87,10 @@ def main():
     # Create main clock for constant FPS
     main_clock = pygame.time.Clock()
     draw_fps = True
-    
+
     # Store menu/option screen to draw above the board
     curr_menu = None
-    
+
     curr_player = 0
 
     # Main game loop
@@ -111,7 +116,7 @@ def main():
                         if new_building:
                             game_board.board_squares[new_building.index] = new_building
                             curr_menu = None
-            
+
             # Handle keyboard events
             elif event.type == KEYDOWN:
                 if event.key == K_f:
