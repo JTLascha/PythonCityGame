@@ -61,24 +61,24 @@ class Board:
         return p
 
     def updateQoL(self):
-	"""Iteratres through the board updating the QoL of each square"""
-	#neighbors is a set of numbers to add to index x to get x's neighboring squares
-	neighbors = set([0, -1 - self.columns, -self.columns, 1 -self.columns, -1, 0, 1, self.columns - 1, self.columns, self.columns + 1])
-	for x in range(0,len(self.board_squares)):
-		#check is the subset of neighbors we're actually going to check
-		QoL = 0
-		count = 0
-		check = neighbors
-		if x % self.columns == 0:
-			check = check - set([-self.columns -1, -1, self.columns - 1])
-		elif x % self.columns == self.columns - 1:
-			check = check - set([1 - self.columns, 1, self.columns + 1])
-		if int(x / self.columns) == 0:
-			check = check - set([-self.columns - 1, -self.columns, 1 - self.columns])
-		elif int(x / self.columns) == self.rows - 1:
-			check = check - set([self.columns - 1, self.columns, self.columns + 1])
-		for n in check:
-			QoL += self.board_squares[x + n].getOldQoL()
-			count += 1
-		QoL = QoL / count
-		self.board_squares[x].updateQoL(QoL)
+        """Iteratres through the board updating the QoL of each square"""
+        #neighbors is a set of numbers to add to index x to get x's neighboring squares
+        neighbors = set([0, -1 - self.columns, -self.columns, 1 -self.columns, -1, 0, 1, self.columns - 1, self.columns, self.columns + 1])
+        for x in range(0,len(self.board_squares)):
+            #check is the subset of neighbors we're actually going to check
+            QoL = 0
+            count = 0
+            check = neighbors
+            if x % self.columns == 0:
+                check = check - set([-self.columns -1, -1, self.columns - 1])
+            elif x % self.columns == self.columns - 1:
+                check = check - set([1 - self.columns, 1, self.columns + 1])
+            if int(x / self.columns) == 0:
+                check = check - set([-self.columns - 1, -self.columns, 1 - self.columns])
+            elif int(x / self.columns) == self.rows - 1:
+                check = check - set([self.columns - 1, self.columns, self.columns + 1])
+            for n in check:
+                QoL += self.board_squares[x + n].getOldQoL()
+                count += 1
+            QoL = QoL / count
+            self.board_squares[x].updateQoL(QoL)

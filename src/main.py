@@ -17,16 +17,16 @@ def getNextPlayer(playerList,gameBoard):
     turn = 0
     truTurn = 0
     while True:
-	b.updateQoL() # update the QoL in each square every turn
+        b.updateQoL() # update the QoL in each square every turn
         truTurn = (truTurn+ 1)%3
         if truTurn == 2:
             prof = b.genProfit()
             p[0].money += prof[0]
             p[1].money += prof[1]
-	    if p[0].money < 0:
-		p[0].money = 0
-	    if p[1].money < 0:
-		p[1].money = 0
+        if p[0].money < 0:
+            p[0].money = 0
+        if p[1].money < 0:
+            p[1].money = 0
             if p[0].money >= 6000 or p[1].money >= 6000:
                 if p[0].money != p[1].money:
                     yield -1

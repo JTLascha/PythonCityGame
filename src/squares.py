@@ -114,13 +114,13 @@ class BuildMenu(_Menu):
                 return Blight(self.building.x, self.building.y, self.building.index, player)
 
         elif self.sell_position.collidepoint(mouseX, mouseY):
-		if self.building.owner.num != player.num:
-			return None
+            if self.building.owner.num != player.num:
+                return None
 
-	        player.money += 100
-        	return ForSaleSquare(self.building.x, self.building.y, self.building.index, player)
+                player.money += 100
+                return ForSaleSquare(self.building.x, self.building.y, self.building.index, player)
 
-	return None
+        return None
 
 class OwnedMenu(_Menu):
     def __init__(self, building):
@@ -135,10 +135,10 @@ class OwnedMenu(_Menu):
         surface.blit(building_qol_text, qol_position)
 
         profit_text = self.font.render("Profit: " + str(self.building.profits), 1, (255, 255, 255))
-	if(self.building.fee):
-	        profit_text = self.font.render("Fees: " + str(self.building.profits * -1), 1, (255, 255, 255))
-        profit_position = profit_text.get_rect().move(0, 100)
-        surface.blit(profit_text, profit_position)
+        if(self.building.fee):
+            profit_text = self.font.render("Fees: " + str(self.building.profits * -1), 1, (255, 255, 255))
+            profit_position = profit_text.get_rect().move(0, 100)
+            surface.blit(profit_text, profit_position)
 
         self.demolish_button = self.font.render("Demolish", 1, (255, 255, 0), (150, 150, 150))
         self.demolish_position = self.demolish_button.get_rect().move(0, 150)
@@ -146,9 +146,9 @@ class OwnedMenu(_Menu):
 
     def handle_click(self, mouseX, mouseY, player):
         if self.demolish_position.collidepoint(mouseX, mouseY):
-		if self.building.owner.num == player.num:
-	        	return EmptySquare(self.building.x, self.building.y, self.building.index, player)
-	return None
+            if self.building.owner.num == player.num:
+                    return EmptySquare(self.building.x, self.building.y, self.building.index, player)
+        return None
 
 class HelpMenu(_Menu):
     def __init__(self):
@@ -187,11 +187,11 @@ class _BaseSquare(pygame.sprite.Sprite):
         self.max_population = max_population
         self.image = None
         self.QoL = 30
-	self.oldQoL = 30
+        self.oldQoL = 30
         self.minQoL = 0
-	self.maxQoL = 100
-	self.QoLBonus = 0
-	self.fee = False
+        self.maxQoL = 100
+        self.QoLBonus = 0
+        self.fee = False
 
     def produce(self):
         money = self.profits * self.QoL / 100
@@ -205,16 +205,16 @@ class _BaseSquare(pygame.sprite.Sprite):
         """Get menu object referencing this square (self)"""
         pass
     def getOldQoL(self):
-	return self.oldQoL
+        return self.oldQoL
 
    # call this in the map class updateQoL function
     def updateQoL(self, newQoL):
         self.oldQoL = self.QoL
-	self.QoL = (newQoL + self.QoL + self.QoLBonus) / 2
-	if self.QoL > self.maxQoL:
-		self.QoL = self.maxQoL
-	if self.QoL < self.minQoL:
-		self.QoL = self.minQoL
+        self.QoL = (newQoL + self.QoL + self.QoLBonus) / 2
+        if self.QoL > self.maxQoL:
+            self.QoL = self.maxQoL
+        if self.QoL < self.minQoL:
+            self.QoL = self.minQoL
 
 
 class ForSaleSquare(_BaseSquare):
@@ -236,17 +236,17 @@ class EmptySquare(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 0)
 
-	self.QoL = 50
-	self.oldQoL = 50
-	self.QoLBonus = 5
-	self.maxQoL = 100
+        self.QoL = 50
+        self.oldQoL = 50
+        self.QoLBonus = 5
+        self.maxQoL = 100
         self.image = assets.get_image("empty")
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
-	self.maxQoL = 25
+        self.maxQoL = 25
+
     def get_menu(self):
         return BuildMenu(self)
-
 
 
 class Restaurant(_BaseSquare):
@@ -258,10 +258,10 @@ class Restaurant(_BaseSquare):
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 50
-	self.QoLBonus = 20
+        self.QoLBonus = 20
         self.oldQoL = 50
         self.profits = 100
-	self.maxQoL = 100
+        self.maxQoL = 100
 
     def get_menu(self):
         return OwnedMenu(self)
@@ -273,16 +273,16 @@ class PublicPark(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 15)
 
-	self.fee = True
+        self.fee = True
         self.image = assets.get_image("park" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 100
-	self.QoLBonus = 60
+        self.QoLBonus = 60
         self.oldQoL = 100
         self.profits = -50
-	self.minQoL = 50
-	self.maxQoL = 200
+        self.minQoL = 50
+        self.maxQoL = 200
 
     def get_menu(self):
         return OwnedMenu(self)
@@ -293,17 +293,17 @@ class Blight(_BaseSquare):
         # Call parent constructor
         _BaseSquare.__init__(self, x, y, index, owner, 15)
 
-	self.fee - True
+        self.fee - True
         self.image = assets.get_image("blight" + str(self.owner.num))
         self.image = pygame.transform.scale(self.image, (config.SQUARE_SIZE, config.SQUARE_SIZE))
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
-	self.QoLBonus = -100
+        self.QoLBonus = -100
         self.oldQoL = -100
         self.profits = 150
-	self.maxQoL = 0
-	self.QoLBonus = -100
-	self.minQoL = -100
+        self.maxQoL = 0
+        self.QoLBonus = -100
+        self.minQoL = -100
 
     def get_menu(self):
         return OwnedMenu(self)
@@ -318,8 +318,9 @@ class Factory(_BaseSquare):
         self.rect = self.image.get_rect().move((x, y))
         self.QoL = 0
         self.oldQoL = 0
-	self.QoLBonus = -20
+        self.QoLBonus = -20
         self.profits = 400
-	self.maxQoL = 100
+        self.maxQoL = 100
+    
     def get_menu(self):
         return OwnedMenu(self)
