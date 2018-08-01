@@ -1,57 +1,43 @@
 # PythonCityGgame
 
-## Base Requirements:
- - Gameplay:
-    * 2 player (add more if time permits)
-    * Multiple levels: each with fixed # of players
-    * Resources:
-        - Money/Gold
-        - People
-        - Buildings
-        - More if time permits
- - Game Board:
-    * Grid of tiles/squares
-    * Clickable tiles
-    * Change sprite depending on building type
- - Menu:
-    - Right side
-    - Displays information about selected building
-        * Workers
-        * Profit
-        * Quality of Life
-        * Quality of Life Modifier
-    - Allows for changing building settings:
-        * Hire/Fire
-        * Upgrading
-        * Destroy building
-        * Sell empty tile to city (possible decay)
- - Mechanics:
-    * Worker happiness and home
-    * Consumer behavior
-    * Worker skills
-    * Player turn:
-        - End Turn button
-        - At end of round, process earnings, worker behavior, etc.
-        - Turn order based on Quality of Life of workers (can change)
-    * **Winning condition**: not decided, either money or at round *X*
+## Requirements
+ - [Pygame](https://www.pygame.org): ```pip install pygame```
 
-## Plan:
- - By July 1st
-    * Basic game screen (tiles, placeholder building)
-    * Some assets (either handmade or open-source)
-    * Work on citizens and behaviors
- - By July 15th
-    * Add most buildings with assets
-    * Add menus for each building
-    * Finish QoL of citizens based on location
-    * Calculate profits
-    * Turn mechanic
- - By July 25th
-    * Multiple levels/players
-    * Finish mechanics
- - By August 1st
-    * Debugging
-    * Finish other details
+## Resources Used:
+ - [Pygame Documentation](https://www.pygame.org/docs/)
+ - [Pygame based game used for reference](https://github.com/Mekire/cabbages-and-kings)
+ - [Pygame tutorials](https://nerdparadise.com/programming/pygame/part1)
+
+## Main Features
+ - Gameplay:
+    * 2 player
+    * Ability to easily add various levels (one comes with the game)
+    * Each player can own buildings that generate profits based on the surrounding QoL
+ - Game Board:
+    * Each player can buy lots and build on them
+    * Buildings can be demolished
+    * 5 different building types
+ - Mechanics:
+    * Earn profits through buildings each round
+    * Clickable grids and menus
+    * Winning condition (reach 6000 dollars)
+    * Dynamic turn order based on money
+
+## Work division
+ - John:
+    * 
+ - Homer:
+    * 
+ - Christopher:
+    * 
+ - Tomas:
+    * Base game window and project organization c530019e59b2946d02f2262e758f99b942455951
+    * Game mouse and keyboard event handling 1d8a2039a80501b01e31907445f9467936022f8d and 6ac77db47e92f2766faea49c77e295a261d20858
+    * ForSale and EmptyLot assets 1138bf7afd59e5862a376d1db118be0ac64160b6
+    * Menu and Square templates 8251b8435e4284fe1f31846b046129e39f2867ba and 1d8a2039a80501b01e31907445f9467936022f8d
+    * Level loading ae6a63c56d12aeb5d9506ee177c53611ee635ac2
+    * Asset management c530019e59b2946d02f2262e758f99b942455951
+    * Background music 6ac77db47e92f2766faea49c77e295a261d20858
 
 ---
 
