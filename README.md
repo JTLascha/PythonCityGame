@@ -1,7 +1,16 @@
 # PythonCityGgame
 
+The "problem" we're solving is making a video game. Specifically, a two player competitive city builder game. City building is a fun genre, but it's typically for single player games. Multiplayer variants exist, but almost always revolve around each player having their own city, with the winner being the player with the best city.
+We wanted a multiplayer city builder game that allowed for competition within one city. We wanted the core experience of building a city to be modified by the presence of another player, instead of following the traditional formula of one player per city.
+
 ## Requirements
- - [Pygame](https://www.pygame.org): ```pip install pygame```
+ - Python 3.x
+ - [Pygame](https://www.pygame.org): ```pip3 install pygame```
+ 
+## Instructions
+```python3 run.py```
+
+Press ```h``` to see the help menu!
 
 ## Resources Used:
  - [Pygame Documentation](https://www.pygame.org/docs/)
@@ -25,19 +34,26 @@
 
 ## Work division
  - John:
-    * 
+    * Game design and administration
+    * QoL spreading
+    * Several buildings, menus and their functionality
+    * Several building assets
  - Homer:
-    * 
+    * Game design
+    * Menus and owner info
+    * Help menu
+    * Various bug fixes
  - Christopher:
-    * 
+    * Game design
+    * Turn structure
+    * End game screen
+    * Player classes
  - Tomas:
-    * Base game window and project organization c530019e59b2946d02f2262e758f99b942455951
-    * Game mouse and keyboard event handling 1d8a2039a80501b01e31907445f9467936022f8d and 6ac77db47e92f2766faea49c77e295a261d20858
-    * ForSale and EmptyLot assets 1138bf7afd59e5862a376d1db118be0ac64160b6
-    * Menu and Square templates 8251b8435e4284fe1f31846b046129e39f2867ba and 1d8a2039a80501b01e31907445f9467936022f8d
-    * Level loading ae6a63c56d12aeb5d9506ee177c53611ee635ac2
-    * Asset management c530019e59b2946d02f2262e758f99b942455951
-    * Background music 6ac77db47e92f2766faea49c77e295a261d20858
+    * Base game window and project structure
+    * Game mouse and keyboard event handling
+    * Menu and Square templates
+    * Level loading
+    * Asset management and background music
 
 ---
 
